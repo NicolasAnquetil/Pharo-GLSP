@@ -22,6 +22,12 @@ GLSPCreateOperationHandler >> handles: anOperation [
 	^ (super handles: anOperation) and: [ self elementTypeIds includes: anOperation elementTypeId ]
 ]
 
+{ #category : 'testing' }
+GLSPCreateOperationHandler >> isCreateOperationHandler [
+
+	^ true
+]
+
 { #category : 'handling' }
 GLSPCreateOperationHandler >> isNodeCreation [
 

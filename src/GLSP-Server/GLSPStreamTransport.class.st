@@ -46,15 +46,17 @@ GLSPStreamTransport >> headerFor: aByteArray [
 
 { #category : 'transport' }
 GLSPStreamTransport >> next [
-	"Read the next framed message and answer its content (a String), or nil at the end of the input"
+	"Read the next framed message and answer its content (a String), or nil at the end of the input.
+	A frame without Content-Length header is skipped"
 
 	| line length |
+	length := nil.
 	[
 		line := self readHeaderLine.
 		line ifNil: [ ^ nil ].
 		line isEmpty ] whileFalse: [
 		(line asLowercase beginsWith: 'content-length:') ifTrue: [ length := (line copyAfter: $:) trimBoth asInteger ] ].
-	length ifNil: [ ^ self next "no header: skip the empty line" ].
+	length ifNil: [ ^ self next ].
 	^ (self readBytes: length) utf8Decoded
 ]
 

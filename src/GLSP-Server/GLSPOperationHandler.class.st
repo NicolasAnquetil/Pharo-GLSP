@@ -24,6 +24,12 @@ GLSPOperationHandler >> handles: anOperation [
 	^ anOperation kind = self operationKind
 ]
 
+{ #category : 'testing' }
+GLSPOperationHandler >> isCreateOperationHandler [
+
+	^ false
+]
+
 { #category : 'handling' }
 GLSPOperationHandler >> operationKind [
 

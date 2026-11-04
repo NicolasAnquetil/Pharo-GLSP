@@ -49,7 +49,7 @@ GLSPDiagramModule >> createClientSession: anId server: aServer clientActionKinds
 { #category : 'tooling' }
 GLSPDiagramModule >> createHandlers [
 
-	^ self createOperationHandlers select: [ :each | each isKindOf: GLSPCreateOperationHandler ]
+	^ self createOperationHandlers select: [ :each | each isCreateOperationHandler ]
 ]
 
 { #category : 'accessing' }
