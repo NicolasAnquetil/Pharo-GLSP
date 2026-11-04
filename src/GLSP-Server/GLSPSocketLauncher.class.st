@@ -43,7 +43,7 @@ GLSPSocketLauncher >> connections [
 	^ connections
 ]
 
-{ #category : 'running' }
+{ #category : 'initialization' }
 GLSPSocketLauncher >> initialize [
 
 	super initialize.

@@ -31,7 +31,7 @@ GLSPRecordingTransport >> actionsOfKind: aKind [
 	^ self actions select: [ :each | each kind = aKind ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 GLSPRecordingTransport >> initialize [
 
 	super initialize.
@@ -51,13 +51,13 @@ GLSPRecordingTransport >> notificationsNamed: aMethodName [
 	^ self messages select: [ :each | (each at: 'method' ifAbsent: [ nil ]) = aMethodName ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 GLSPRecordingTransport >> reset [
 
 	sent removeAll
 ]
 
-{ #category : 'accessing' }
+{ #category : 'sending' }
 GLSPRecordingTransport >> send: aJSONString [
 
 	sent add: aJSONString

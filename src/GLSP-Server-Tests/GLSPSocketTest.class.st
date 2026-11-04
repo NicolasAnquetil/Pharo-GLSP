@@ -121,10 +121,10 @@ GLSPSocketTest >> testServerEndsWhenTheClientDisconnects [
 	self assert: launcher connections size equals: 1.
 	client close.
 	deadline := Time millisecondClockValue + 3000.
-	[ launcher connections notEmpty and: [ Time millisecondClockValue < deadline ] ] whileTrue: [ (Delay forMilliseconds: 20) wait ].
+	[ launcher connections isNotEmpty and: [ Time millisecondClockValue < deadline ] ] whileTrue: [ (Delay forMilliseconds: 20) wait ].
 	self assert: launcher connections isEmpty.
 	self deny: (Process allInstances anySatisfy: [ :each |
-			 each name notNil and: [ (each name beginsWith: 'GLSP connection') and: [ each isTerminated not ] ] ])
+			 each name isNotNil and: [ (each name beginsWith: 'GLSP connection') and: [ each isTerminated not ] ] ])
 ]
 
 { #category : 'tests' }

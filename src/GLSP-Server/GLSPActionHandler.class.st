@@ -22,7 +22,7 @@ GLSPActionHandler >> handledActionKinds [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'handling' }
+{ #category : 'error handling' }
 GLSPActionHandler >> handles: anAction [
 
 	^ self handledActionKinds includes: anAction kind

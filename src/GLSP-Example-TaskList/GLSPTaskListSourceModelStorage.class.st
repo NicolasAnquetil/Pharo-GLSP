@@ -9,13 +9,13 @@ Class {
 	#tag : 'Server'
 }
 
-{ #category : 'converting' }
+{ #category : 'persistence' }
 GLSPTaskListSourceModelStorage >> jsonFromSourceModel: aTaskList [
 
 	^ aTaskList asJSON
 ]
 
-{ #category : 'converting' }
+{ #category : 'persistence' }
 GLSPTaskListSourceModelStorage >> sourceModelFromJSON: aJSONObject [
 
 	^ GLSPTaskList fromJSON: aJSONObject

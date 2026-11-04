@@ -16,7 +16,7 @@ GLSPCreateOperationHandler >> elementTypeIds [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'handling' }
+{ #category : 'error handling' }
 GLSPCreateOperationHandler >> handles: anOperation [
 
 	^ (super handles: anOperation) and: [ self elementTypeIds includes: anOperation elementTypeId ]

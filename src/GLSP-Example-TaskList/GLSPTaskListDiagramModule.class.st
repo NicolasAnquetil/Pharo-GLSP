@@ -4,8 +4,9 @@ I am the diagram module of the TaskList example language ('tasklist-diagram'), t
 Class {
 	#name : 'GLSPTaskListDiagramModule',
 	#superclass : 'GLSPDiagramModule',
-	#category : 'GLSP-Example-TaskList',
-	#package : 'GLSP-Example-TaskList'
+	#category : 'GLSP-Example-TaskList-Server',
+	#package : 'GLSP-Example-TaskList',
+	#tag : 'Server'
 }
 
 { #category : 'accessing' }

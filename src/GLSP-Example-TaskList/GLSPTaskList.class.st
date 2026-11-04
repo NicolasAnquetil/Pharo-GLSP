@@ -20,9 +20,10 @@ GLSPTaskList class >> fromJSON: aDictionary [
 	^ self new
 		  id: (aDictionary at: 'id' ifAbsent: [ 'tasklist' ]);
 		  tasks:
-			  ((aDictionary at: 'tasks' ifAbsent: [ #(  ) ]) collect: [ :each | GLSPTaskListTask fromJSON: each ]) asOrderedCollection;
-		  transitions: ((aDictionary at: 'transitions' ifAbsent: [ #(  ) ]) collect: [ :each | GLSPTaskListTransition fromJSON: each ])
-				  asOrderedCollection;
+			  ((aDictionary at: 'tasks' ifAbsent: [ #(  ) ]) collect: [ :each | GLSPTaskListTask fromJSON: each ] as: OrderedCollection);
+		  transitions: ((aDictionary at: 'transitions' ifAbsent: [ #(  ) ])
+				   collect: [ :each | GLSPTaskListTransition fromJSON: each ]
+				   as: OrderedCollection);
 		  yourself
 ]
 
@@ -43,8 +44,8 @@ GLSPTaskList >> asJSON [
 
 	^ Dictionary new
 		  at: 'id' put: id;
-		  at: 'tasks' put: (tasks collect: [ :each | each asJSON ]) asArray;
-		  at: 'transitions' put: (transitions collect: [ :each | each asJSON ]) asArray;
+		  at: 'tasks' put: (tasks collect: [ :each | each asJSON ] as: Array);
+		  at: 'transitions' put: (transitions collect: [ :each | each asJSON ] as: Array);
 		  yourself
 ]
 
@@ -58,7 +59,7 @@ GLSPTaskList >> id: anObject [
 	id := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 GLSPTaskList >> initialize [
 
 	super initialize.

@@ -77,8 +77,9 @@ GLSPServerTestCase >> process: anActionJSONString [
 GLSPServerTestCase >> process: anActionJSONString clientId: aClientId [
 	"Send an action to the server through the 'process' notification"
 
-	^ server handleJSON:
-		  '{"jsonrpc":"2.0","method":"process","params":{"clientId":"' , aClientId , '","action":' , anActionJSONString , '}}'
+	^ server handleJSON: (String streamContents: [ :stream |
+			   stream << '{"jsonrpc":"2.0","method":"process","params":{"clientId":"' << aClientId << '","action":' << anActionJSONString
+			   << '}}' ])
 ]
 
 { #category : 'running' }
@@ -112,7 +113,7 @@ GLSPServerTestCase >> requestModel [
 { #category : 'helpers' }
 GLSPServerTestCase >> sentKinds [
 
-	^ (transport actions collect: [ :each | each kind ]) asArray
+	^ transport actions collect: [ :each | each kind ] as: Array
 ]
 
 { #category : 'helpers' }

@@ -15,11 +15,11 @@ GLSPTestGModelFactory >> createGModel: aModelState [
 	root := GLSPGModelRoot new
 		        id: 'root';
 		        yourself.
-	aModelState sourceModel do: [ :name |
-			root add: (GLSPGNode new
+	root addAll: (aModelState sourceModel collect: [ :name |
+				 GLSPGNode new
 					 id: name;
 					 position: 0 @ 0;
 					 size: 10 @ 10;
-					 yourself) ].
+					 yourself ]).
 	^ root
 ]

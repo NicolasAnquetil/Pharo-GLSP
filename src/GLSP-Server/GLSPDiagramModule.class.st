@@ -76,16 +76,18 @@ GLSPDiagramModule >> edgeCreateHandlers [
 GLSPDiagramModule >> edgeTypeHints [
 	"By default every created edge type can be deleted and routed"
 
-	^ (self edgeCreateHandlers flatCollect: [ :handler |
-			   handler elementTypeIds collect: [ :type |
-					   GLSPEdgeTypeHint new
-						   elementTypeId: type;
-						   repositionable: false;
-						   deletable: true;
-						   routable: true;
-						   sourceElementTypeIds: handler sourceElementTypeIds;
-						   targetElementTypeIds: handler targetElementTypeIds;
-						   yourself ] ]) asArray
+	^ self edgeCreateHandlers
+		  flatCollect: [ :handler |
+				  handler elementTypeIds collect: [ :type |
+						  GLSPEdgeTypeHint new
+							  elementTypeId: type;
+							  repositionable: false;
+							  deletable: true;
+							  routable: true;
+							  sourceElementTypeIds: handler sourceElementTypeIds;
+							  targetElementTypeIds: handler targetElementTypeIds;
+							  yourself ] ]
+		  as: Array
 ]
 
 { #category : 'accessing' }
@@ -112,15 +114,17 @@ GLSPDiagramModule >> nodeCreateHandlers [
 GLSPDiagramModule >> shapeTypeHints [
 	"By default every created node type can be moved, resized and deleted, but not reparented"
 
-	^ (self nodeCreateHandlers flatCollect: [ :handler |
-			   handler elementTypeIds collect: [ :type |
-					   GLSPShapeTypeHint new
-						   elementTypeId: type;
-						   repositionable: true;
-						   deletable: true;
-						   resizable: true;
-						   reparentable: false;
-						   yourself ] ]) asArray
+	^ self nodeCreateHandlers
+		  flatCollect: [ :handler |
+				  handler elementTypeIds collect: [ :type |
+						  GLSPShapeTypeHint new
+							  elementTypeId: type;
+							  repositionable: true;
+							  deletable: true;
+							  resizable: true;
+							  reparentable: false;
+							  yourself ] ]
+		  as: Array
 ]
 
 { #category : 'accessing' }
@@ -137,15 +141,17 @@ GLSPDiagramModule >> toolPaletteItems [
 	| groups counter itemsFor |
 	counter := 0.
 	itemsFor := [ :handlers |
-		            (handlers flatCollect: [ :handler |
-				             handler elementTypeIds collect: [ :type |
-						             counter := counter + 1.
-						             GLSPPaletteItem new
-							             id: 'palette-item' , counter printString;
-							             label: handler label;
-							             sortString: handler label first asString;
-							             actions: { (handler triggerActionFor: type) };
-							             yourself ] ]) asArray ].
+		            handlers
+			            flatCollect: [ :handler |
+					            handler elementTypeIds collect: [ :type |
+							            counter := counter + 1.
+							            GLSPPaletteItem new
+								            id: ('palette-item{1}' format: { counter });
+								            label: handler label;
+								            sortString: handler label first asString;
+								            actions: { (handler triggerActionFor: type) };
+								            yourself ] ]
+			            as: Array ].
 	groups := OrderedCollection new.
 	{
 		('node-group' -> ('Nodes' -> self nodeCreateHandlers)).

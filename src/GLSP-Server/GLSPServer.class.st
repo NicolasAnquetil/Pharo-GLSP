@@ -61,7 +61,7 @@ GLSPServer >> disposeClientSession: clientSessionId args: args [
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 GLSPServer >> ensureInitialized [
 
 	initialized ifFalse: [ GLSPServerError signal: 'The GLSP server is not initialized' ]
@@ -180,7 +180,7 @@ GLSPServer >> serveTransport: aTransport [
 
 	| message |
 	transport := aTransport.
-	[ (message := aTransport next) notNil ] whileTrue: [ self handleMessage: message ]
+	[ (message := aTransport next) isNotNil ] whileTrue: [ self handleMessage: message ]
 ]
 
 { #category : 'accessing' }

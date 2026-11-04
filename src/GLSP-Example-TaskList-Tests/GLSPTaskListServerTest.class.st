@@ -17,7 +17,7 @@ GLSPTaskListServerTest >> child: anId of: aJSON [
 	^ (aJSON at: 'children') detect: [ :each | (each at: 'id') = anId ] ifNone: [ nil ]
 ]
 
-{ #category : 'running' }
+{ #category : 'helpers' }
 GLSPTaskListServerTest >> diagramType [
 
 	^ 'tasklist-diagram'
@@ -54,7 +54,7 @@ GLSPTaskListServerTest >> setUp [
 	file writeStreamDo: [ :stream | stream nextPutAll: self initialFileContents ]
 ]
 
-{ #category : 'running' }
+{ #category : 'helpers' }
 GLSPTaskListServerTest >> sourceUri [
 
 	^ file asZnUrl printString
@@ -125,7 +125,7 @@ GLSPTaskListServerTest >> testDeleteTaskDeletesItsTransitions [
 
 	self openModel.
 	self process: '{"kind":"deleteElement","isOperation":true,"elementIds":["task1"]}'.
-	self assert: (self taskList tasks collect: [ :each | each id ]) asArray equals: #( 'task2' ).
+	self assert: (self taskList tasks collect: [ :each | each id ] as: Array) equals: #( 'task2' ).
 	self assert: self taskList transitions isEmpty
 ]
 
@@ -205,7 +205,7 @@ GLSPTaskListServerTest >> testToolPalette [
 	self process:
 		'{"kind":"requestContextActions","contextId":"tool-palette","editorContext":{"selectedElementIds":[]},"requestId":"r3"}'.
 	groups := (transport actionsOfKind: 'setContextActions') first actions.
-	self assert: (groups collect: [ :each | each at: 'label' ]) asArray equals: #( 'Nodes' 'Edges' ).
+	self assert: (groups collect: [ :each | each at: 'label' ] as: Array) equals: #( 'Nodes' 'Edges' ).
 	self assert: (((groups second at: 'children') first at: 'actions') first at: 'kind') equals: 'triggerEdgeCreation'.
 	self assert: ((groups second at: 'children') first at: 'label') equals: 'Transition'
 ]
@@ -217,7 +217,7 @@ GLSPTaskListServerTest >> testTypeHints [
 	self openModel.
 	self process: '{"kind":"requestTypeHints","requestId":"r2"}'.
 	hints := (transport actionsOfKind: 'setTypeHints') first.
-	self assert: (hints shapeHints collect: [ :each | each at: 'elementTypeId' ]) asArray equals: #( 'task' ).
+	self assert: (hints shapeHints collect: [ :each | each at: 'elementTypeId' ] as: Array) equals: #( 'task' ).
 	edgeHint := hints edgeHints first.
 	self assert: (edgeHint at: 'elementTypeId') equals: 'transition'.
 	self assert: (edgeHint at: 'sourceElementTypeIds') equals: #( 'task' ).

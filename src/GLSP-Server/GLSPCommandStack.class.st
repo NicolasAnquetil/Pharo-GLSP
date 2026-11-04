@@ -17,13 +17,13 @@ Class {
 { #category : 'executing' }
 GLSPCommandStack >> canRedo [
 
-	^ redoStack notEmpty
+	^ redoStack isNotEmpty
 ]
 
 { #category : 'executing' }
 GLSPCommandStack >> canUndo [
 
-	^ undoStack notEmpty
+	^ undoStack isNotEmpty
 ]
 
 { #category : 'executing' }
@@ -42,7 +42,7 @@ GLSPCommandStack >> flush [
 	savePoint := nil
 ]
 
-{ #category : 'executing' }
+{ #category : 'initialization' }
 GLSPCommandStack >> initialize [
 
 	super initialize.

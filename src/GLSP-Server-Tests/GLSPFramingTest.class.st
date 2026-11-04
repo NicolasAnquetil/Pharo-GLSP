@@ -11,17 +11,23 @@ Class {
 { #category : 'tests' }
 GLSPFramingTest >> frame: aString [
 
-	^ ('Content-Length: ' , aString utf8Encoded size printString , String crlf , String crlf) asByteArray , aString utf8Encoded
+	^ ByteArray streamContents: [ :stream |
+			  stream
+				  nextPutAll: (GLSPStreamTransport new headerFor: aString utf8Encoded);
+				  nextPutAll: aString utf8Encoded ]
 ]
 
 { #category : 'tests' }
 GLSPFramingTest >> testReadFramedMessages [
 
 	| bytes transport |
-	bytes := (self frame: '{"id":1}')
-	         ,
-		         ('Content-Length: 8' , String crlf , 'Content-Type: application/vscode-jsonrpc; charset=utf-8' , String crlf
-		          , String crlf) asByteArray , '{"id":2}' asByteArray , (self frame: '{"t":"é"}').
+	bytes := ByteArray streamContents: [ :stream |
+			         stream nextPutAll: (self frame: '{"id":1}').
+			         stream nextPutAll: (String streamContents: [ :header |
+						          header << 'Content-Length: 8' << String crlf << 'Content-Type: application/vscode-jsonrpc; charset=utf-8'
+						          << String crlf << String crlf ]) asByteArray.
+			         stream nextPutAll: '{"id":2}' asByteArray.
+			         stream nextPutAll: (self frame: '{"t":"é"}') ].
 	transport := GLSPStreamTransport in: (ReadStream on: bytes) out: nil.
 	self assert: transport next equals: '{"id":1}'.
 	self assert: transport next equals: '{"id":2}'.

@@ -17,8 +17,8 @@ GLSPTaskListGModelFactory >> createGModel: aModelState [
 	root := GLSPGModelRoot new
 		        id: taskList id;
 		        yourself.
-	taskList tasks do: [ :each | root add: (self nodeFor: each) ].
-	taskList transitions do: [ :each | root add: (self edgeFor: each) ].
+	root addAll: (taskList tasks collect: [ :each | self nodeFor: each ]).
+	root addAll: (taskList transitions collect: [ :each | self edgeFor: each ]).
 	^ root
 ]
 

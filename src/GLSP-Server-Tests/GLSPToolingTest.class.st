@@ -54,7 +54,7 @@ GLSPToolingTest >> testToolPalette [
 	answer := (transport actionsOfKind: 'setContextActions') first.
 	self assert: answer responseId equals: 'r3'.
 	groups := answer actions.
-	self assert: (groups collect: [ :each | each at: 'label' ]) asArray equals: #( 'Nodes' ).
+	self assert: (groups collect: [ :each | each at: 'label' ] as: Array) equals: #( 'Nodes' ).
 	nodeItem := (groups first at: 'children') first.
 	self assert: (nodeItem at: 'label') equals: 'node'.
 	self assert: (nodeItem includesKey: 'sortString').

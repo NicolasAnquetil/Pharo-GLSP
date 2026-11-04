@@ -28,13 +28,13 @@ GLSPActionTest >> testActionMessageFromJSON [
 GLSPActionTest >> testActionMessageToJSON [
 
 	| json |
-	json := (GLSPActionMessage
-		         clientId: 'c1'
-		         action: (GLSPSetDirtyStateAction new isDirty: true; reason: 'operation'; yourself))
-		        asJRPCJSON.
+	json := (GLSPActionMessage clientId: 'c1' action: (GLSPSetDirtyStateAction new
+			          isDirty: true;
+			          reason: 'operation';
+			          yourself)) asJRPCJSON.
 	self assert: (json at: 'clientId') equals: 'c1'.
 	self assert: ((json at: 'action') at: 'kind') equals: 'setDirtyState'.
-	self assert: ((json at: 'action') at: 'isDirty') equals: true.
+	self assert: ((json at: 'action') at: 'isDirty').
 	self assert: ((json at: 'action') at: 'reason') equals: 'operation'
 ]
 

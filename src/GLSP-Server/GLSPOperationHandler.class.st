@@ -18,7 +18,7 @@ GLSPOperationHandler >> execute: anOperation in: aClientSession [
 	self subclassResponsibility
 ]
 
-{ #category : 'handling' }
+{ #category : 'error handling' }
 GLSPOperationHandler >> handles: anOperation [
 
 	^ anOperation kind = self operationKind

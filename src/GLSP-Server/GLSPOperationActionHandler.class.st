@@ -25,10 +25,10 @@ GLSPOperationActionHandler >> execute: anOperation in: aClientSession [
 { #category : 'handling' }
 GLSPOperationActionHandler >> handledActionKinds [
 
-	^ (self operationHandlers collect: [ :each | each operationKind ]) asSet asArray
+	^ (self operationHandlers collect: [ :each | each operationKind ] as: Set) asArray
 ]
 
-{ #category : 'handling' }
+{ #category : 'error handling' }
 GLSPOperationActionHandler >> handles: anAction [
 
 	^ anAction isOperation and: [ self operationHandlers anySatisfy: [ :each | each handles: anAction ] ]

@@ -17,7 +17,7 @@ GLSPOperation >> asJRPCJSON [
 		  yourself
 ]
 
-{ #category : 'serialization' }
+{ #category : 'testing' }
 GLSPOperation >> isOperation [
 
 	^ true

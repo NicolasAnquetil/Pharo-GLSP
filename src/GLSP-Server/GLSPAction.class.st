@@ -58,13 +58,10 @@ GLSPAction class >> toJSON: anObject [
 
 	anObject isString ifTrue: [ ^ anObject ].
 	anObject isDictionary ifTrue: [
-		^ anObject associations
-			  inject: Dictionary new
-			  into: [ :dict :each |
+			^ anObject associations inject: Dictionary new into: [ :dict :each |
 					  dict at: each key put: (self toJSON: each value).
 					  dict ] ].
-	anObject isCollection ifTrue: [
-		^ (anObject collect: [ :each | self toJSON: each ]) asArray ].
+	anObject isCollection ifTrue: [ ^ anObject collect: [ :each | self toJSON: each ] as: Array ].
 	(anObject isKindOf: Point) ifTrue: [ ^ anObject asGLSPPointJSON ].
 	^ anObject asJRPCJSON
 ]

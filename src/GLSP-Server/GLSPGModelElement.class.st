@@ -35,6 +35,13 @@ GLSPGModelElement >> add: anElement [
 	^ anElement
 ]
 
+{ #category : 'hierarchy' }
+GLSPGModelElement >> addAll: aCollection [
+
+	aCollection do: [ :each | self add: each ].
+	^ aCollection
+]
+
 { #category : 'accessing' }
 GLSPGModelElement >> addCssClass: aString [
 
@@ -75,11 +82,9 @@ GLSPGModelElement >> asJRPCJSON [
 	json
 		at: 'id' put: id;
 		at: 'type' put: self type;
-		at: 'children' put: (children collect: [ :each | each asJRPCJSON ]) asArray.
-	(cssClasses isNil or: [ cssClasses isEmpty ]) ifFalse: [
-		json at: 'cssClasses' put: cssClasses asArray ].
-	(args isNil or: [ args isEmpty ]) ifFalse: [
-		json at: 'args' put: args asJRPCJSON ].
+		at: 'children' put: (children collect: [ :each | each asJRPCJSON ] as: Array).
+	(cssClasses isNil or: [ cssClasses isEmpty ]) ifFalse: [ json at: 'cssClasses' put: cssClasses asArray ].
+	(args isNil or: [ args isEmpty ]) ifFalse: [ json at: 'args' put: args asJRPCJSON ].
 	self addPropertiesTo: json.
 	^ json
 ]

@@ -27,7 +27,7 @@ GLSPModelState >> clientOptions: aDictionary [
 	clientOptions := aDictionary ifNil: [ Dictionary new ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 GLSPModelState >> initialize [
 	super initialize.
 	clientOptions := Dictionary new.

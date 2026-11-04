@@ -33,7 +33,7 @@ GLSPActionDispatchTest >> testRequestModelAnswersSetModel [
 	setModels := transport actionsOfKind: 'setModel'.
 	self assert: setModels size equals: 1.
 	self assert: setModels first responseId equals: 'r1'.
-	self assert: ((setModels first newRoot at: 'children') collect: [ :each | each at: 'id' ]) asArray equals: #( 'a' 'b' ).
+	self assert: ((setModels first newRoot at: 'children') collect: [ :each | each at: 'id' ] as: Array) equals: #( 'a' 'b' ).
 	self assert: transport actionMessages first clientId equals: 's1'
 ]
 
@@ -46,7 +46,7 @@ GLSPActionDispatchTest >> testRequestModelFillsTheModelState [
 	self assert: session modelState sourceUri equals: 'test://model'.
 	self assert: session modelState sourceModel asArray equals: #( 'a' 'b' ).
 	self assert: session modelState root class equals: GLSPGModelRoot.
-	self assert: (session modelState root elementAt: 'b') notNil
+	self assert: (session modelState root elementAt: 'b') isNotNil
 ]
 
 { #category : 'tests' }

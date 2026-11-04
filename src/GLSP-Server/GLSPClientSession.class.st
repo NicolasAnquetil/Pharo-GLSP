@@ -70,7 +70,7 @@ GLSPClientSession >> dispatch: anAction [
 	handlers do: [ :handler | self execute: handler on: anAction ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 GLSPClientSession >> dispose [
 	"Release the resources of the session"
 

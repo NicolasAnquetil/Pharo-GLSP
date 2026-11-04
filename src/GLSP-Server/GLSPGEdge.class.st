@@ -26,7 +26,7 @@ GLSPGEdge >> addPropertiesTo: aDictionary [
 	aDictionary
 		at: 'sourceId' put: sourceId;
 		at: 'targetId' put: targetId;
-		at: 'routingPoints' put: (self routingPoints collect: [ :each | each asGLSPPointJSON ]) asArray
+		at: 'routingPoints' put: (self routingPoints collect: [ :each | each asGLSPPointJSON ] as: Array)
 ]
 
 { #category : 'accessing' }

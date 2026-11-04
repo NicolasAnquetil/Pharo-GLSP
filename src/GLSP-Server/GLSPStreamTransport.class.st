@@ -22,7 +22,7 @@ GLSPStreamTransport class >> in: aReadStream out: aWriteStream [
 		  yourself
 ]
 
-{ #category : 'transport' }
+{ #category : 'sending' }
 GLSPStreamTransport >> close [
 
 	inStream ifNotNil: [ :stream |
@@ -33,6 +33,15 @@ GLSPStreamTransport >> close [
 			[ stream close ]
 				on: Error
 				do: [ :e | e return: nil ] ]
+]
+
+{ #category : 'transport' }
+GLSPStreamTransport >> headerFor: aByteArray [
+	"The framing header preceding a message body of aByteArray"
+
+	^ (String streamContents: [ :stream |
+			   stream << 'Content-Length: ' print: aByteArray size.
+			   stream << String crlf << String crlf ]) asByteArray
 ]
 
 { #category : 'transport' }
@@ -89,13 +98,13 @@ GLSPStreamTransport >> readHeaderLine [
 	^ line contents
 ]
 
-{ #category : 'transport' }
+{ #category : 'sending' }
 GLSPStreamTransport >> send: aJSONString [
 
 	| body |
 	body := aJSONString utf8Encoded.
 	outStream
-		nextPutAll: ('Content-Length: ' , body size printString , String crlf , String crlf) asByteArray;
+		nextPutAll: (self headerFor: body);
 		nextPutAll: body;
 		flush
 ]
