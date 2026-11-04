@@ -28,6 +28,22 @@ GLSPGModelTest >> testLabelAsJSON [
 ]
 
 { #category : 'tests' }
+GLSPGModelTest >> testLayoutOptionsAsJSON [
+
+	| options json |
+	options := Dictionary newFromPairs: #( 'paddingRight' 10 'prefWidth' 80 ).
+	json := (GLSPGNode new
+		         id: 'n1';
+		         layout: 'hbox';
+		         layoutOptions: options;
+		         yourself) asJRPCJSON.
+	self assert: (json at: 'layoutOptions') equals: options.
+	self deny: ((GLSPGNode new
+			  id: 'n2';
+			  yourself) asJRPCJSON includesKey: 'layoutOptions')
+]
+
+{ #category : 'tests' }
 GLSPGModelTest >> testNodeAsJSON [
 
 	| json |

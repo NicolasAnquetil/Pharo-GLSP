@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'position',
 		'size',
-		'layout'
+		'layout',
+		'layoutOptions'
 	],
 	#category : 'GLSP-Server-GModel',
 	#package : 'GLSP-Server',
@@ -16,10 +17,10 @@ Class {
 
 { #category : 'serialization' }
 GLSPGShapeElement >> addPropertiesTo: aDictionary [
-
 	position ifNotNil: [ aDictionary at: 'position' put: position asGLSPPointJSON ].
 	size ifNotNil: [ aDictionary at: 'size' put: size asGLSPDimensionJSON ].
-	layout ifNotNil: [ aDictionary at: 'layout' put: layout ]
+	layout ifNotNil: [ aDictionary at: 'layout' put: layout ].
+	layoutOptions ifNotNil: [ aDictionary at: 'layoutOptions' put: layoutOptions ]
 ]
 
 { #category : 'accessing' }
@@ -33,6 +34,18 @@ GLSPGShapeElement >> layout: aString [
 	"e.g. 'vbox', 'hbox', 'freeform'"
 
 	layout := aString
+]
+
+{ #category : 'accessing' }
+GLSPGShapeElement >> layoutOptions [
+	"Options of my layout (e.g. paddingLeft, hGap, prefWidth), a Dictionary or nil"
+
+	^ layoutOptions
+]
+
+{ #category : 'accessing' }
+GLSPGShapeElement >> layoutOptions: aDictionary [
+	layoutOptions := aDictionary
 ]
 
 { #category : 'accessing' }
