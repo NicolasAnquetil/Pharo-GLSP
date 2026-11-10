@@ -33,6 +33,12 @@ launcher stop.
 
 Each TCP connection gets its own `GLSPServer`. The server needs no graphical backend.
 
+## Example
+
+An ArchitecturalMap, computed by Moose on the packages of a PharoAI model and displayed with the Javascript client of Eclipse (see also [https://github.com/NicolasAnquetil/Pharo-GLSP-Client](https://github.com/NicolasAnquetil/Pharo-GLSP-client))
+
+<img border="2" width="800" height="360" alt="Screenshot of a graph of nodes" src="https://github.com/user-attachments/assets/276d48ce-31a8-4c73-8d5a-2921ee8af09c" />
+
 ## What is supported
 
 - JSON-RPC lifecycle: `initialize`, `initializeClientSession`, `disposeClientSession`, `process`, `shutdown`
