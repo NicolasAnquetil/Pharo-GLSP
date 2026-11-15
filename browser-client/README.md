@@ -25,7 +25,7 @@ so `server.js` also bridges each browser WebSocket to its own TCP connection to 
            serve: (MiStandaloneArchitecturalMapModel new entities: MooseModel root allModels first allModelPackages)
            onPort: 5007.
        dsmLauncher := GLSPDSMDiagramModule
-           serve: (MiStandaloneDSMModel on: MooseModel root allModels first allModelPackages)
+           serve: MooseModel root allModels first allModelPackages
            onPort: 5008.
 
 2. Here: `npm install` (once), then `node server.js` (builds `dist/` with esbuild and serves it).
