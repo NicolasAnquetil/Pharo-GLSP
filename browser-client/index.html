@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Architectural map (GLSP)</title>
+    <link rel="stylesheet" href="bundle.css" />
+    <style>
+      html, body { margin: 0; height: 100%; font-family: sans-serif; }
+      #sprotty { position: absolute; inset: 0; }
+      #sprotty svg { width: 100%; height: 100%; }
+      /* glsp-sprotty.css sets '.sprotty-node:not(.selected) { stroke-width: 0 }': match its specificity */
+      .sprotty-node, .sprotty-node:not(.selected) { fill: #dce7f7; stroke: #4a6fa5; stroke-width: 1.5px; }
+      .sprotty-node.selected { stroke: #d9822b; stroke-width: 2.5px; }
+      .sprotty-label { font-size: 13px; fill: #1d2b3a; pointer-events: none; }
+      .sprotty-edge { fill: none; stroke: #7a8796; stroke-width: 1; }
+      .sprotty-edge.arrow { fill: #7a8796; }
+      .sprotty-edge.selected { stroke: #d9822b; }
+      .sprotty-edge.arrow.selected { fill: #d9822b; }
+      /* DSM: the cell color comes from the server (fill attribute) */
+      .dsm-cell-box { stroke: #ffffff; stroke-width: 1px; }
+      .dsm-cell.selected .dsm-cell-box { stroke: #d9822b; stroke-width: 2.5px; }
+      /* glsp-sprotty.css has '.sprotty text { text-anchor: middle; font-size: 8pt }': be at least as specific.
+         The header sizes computed by the server assume 13px names */
+      .sprotty .dsm-cell text { font-size: 12px; }
+      .sprotty text.dsm-header-label { font-size: 13px; }
+      .sprotty text.dsm-row-label { text-anchor: end; }
+      .sprotty text.dsm-column-label { text-anchor: start; }
+    </style>
+  </head>
+  <body>
+    <div id="sprotty" class="sprotty"></div>
+    <script src="bundle.js"></script>
+  </body>
+</html>

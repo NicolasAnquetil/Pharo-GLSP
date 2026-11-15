@@ -1,0 +1,19 @@
+{
+  "name": "pharo-glsp-browser-client",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Minimal browser GLSP client for the Pharo GLSP server: MooseIDE architectural map and DSM diagrams",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@eclipse-glsp/client": "2.8.0",
+    "inversify": "6.1.3",
+    "reflect-metadata": "0.2.2",
+    "vscode-jsonrpc": "8.2.0",
+    "ws": "8.18.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0"
+  }
+}

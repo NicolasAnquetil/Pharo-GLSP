@@ -56,6 +56,13 @@ Subclass `GLSPDiagramModule` and provide `diagramType`, a `GLSPSourceModelStorag
 `GLSPFileSourceModelStorage` subclass), a `GLSPGModelFactory` and operation handlers
 (`GLSPOperationHandler` / `GLSPCreateOperationHandler`). See the `GLSP-Example-TaskList` package.
 
+## Browser client
+
+[`browser-client/`](browser-client/) is a minimal, read-only web client built on the official
+`@eclipse-glsp/client` 2.8.0, with a Node bridge between the browser (WebSocket) and the Pharo server (TCP).
+It shows two MooseIDE diagrams served from Pharo: the architectural map and the DSM (dependency structure
+matrix). Run `npm install` then `node server.js` in that folder; see its README.
+
 ## Development history
 
 Built test-first; see [PROGRESS.md](PROGRESS.md) for the step-by-step log (66 tests).
