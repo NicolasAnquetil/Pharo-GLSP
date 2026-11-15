@@ -6,7 +6,7 @@ import { BaseJsonrpcGLSPClient, DiagramLoader, EditMode, GLSPClient, GLSPWebSock
 import { MessageConnection } from 'vscode-jsonrpc';
 import { createContainer } from './di.config';
 
-// ?diagram=dsm shows the DSM; the architectural map otherwise. Each has its own WebSocket path (see server.js)
+// ?diagram=dsm shows the DSM; the architectural map otherwise. Both are served by the same Pharo GLSP server (see server.js)
 const diagrams: { [name: string]: { type: string; title: string } } = {
     archmap: { type: 'archmap-diagram', title: 'Architectural map (GLSP)' },
     dsm: { type: 'dsm-diagram', title: 'DSM (GLSP)' }
@@ -15,7 +15,7 @@ const diagramName = new URLSearchParams(window.location.search).get('diagram') =
 const diagramType = diagrams[diagramName].type;
 document.title = diagrams[diagramName].title;
 const clientId = 'sprotty'; // id of the <div> the diagram is rendered in
-const webSocketUrl = `ws://${window.location.host}/${diagramName}`;
+const webSocketUrl = `ws://${window.location.host}/glsp`;
 
 let glspClient: GLSPClient;
 

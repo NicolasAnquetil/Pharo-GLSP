@@ -1,9 +1,9 @@
 // Check the bridge + Pharo server without a browser: speak GLSP JSON-RPC over the WebSocket
-// and print the model received. Usage: node test-bridge.js [ws://localhost:8080/archmap | ws://localhost:8080/dsm]
+// and print the model received. Usage: node test-bridge.js [archmap | dsm] [ws://localhost:8080/glsp]
 const WebSocket = require('ws');
 
-const url = process.argv[2] || 'ws://localhost:8080/archmap';
-const diagramType = url.endsWith('/dsm') ? 'dsm-diagram' : 'archmap-diagram';
+const diagramType = process.argv[2] === 'dsm' ? 'dsm-diagram' : 'archmap-diagram';
+const url = process.argv[3] || 'ws://localhost:8080/glsp';
 const ws = new WebSocket(url);
 let nextId = 1;
 const pending = new Map();

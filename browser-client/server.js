@@ -2,9 +2,9 @@
 // connection to the Pharo GLSP server (GLSPSocketLauncher).
 //   WebSocket side: one JSON-RPC message per text frame (GLSP browser client)
 //   TCP side:       'Content-Length: <bytes>\r\n\r\n<json>' framing (vscode-jsonrpc / LSP)
-// Each diagram has its own Pharo GLSP server: the WebSocket path tells which one
-//   /archmap -> glspPort (architectural map), /dsm -> dsmPort (DSM)
-// Usage: node server.js [httpPort=8080] [glspHost=127.0.0.1] [glspPort=5007] [dsmPort=5008]
+// One Pharo GLSP server serves all the diagrams (GLSPMooseDiagramModule class>>serveAll:onPort:):
+// the WebSocket path is /glsp, each page chooses its diagram type.
+// Usage: node server.js [httpPort=8080] [glspHost=127.0.0.1] [glspPort=5007]
 const http = require('http');
 const net = require('net');
 const fs = require('fs');
@@ -15,8 +15,6 @@ const { WebSocketServer } = require('ws');
 const httpPort = Number(process.argv[2] || 8080);
 const glspHost = process.argv[3] || '127.0.0.1';
 const glspPort = Number(process.argv[4] || 5007);
-const dsmPort = Number(process.argv[5] || 5008);
-const portsByPath = { '/archmap': glspPort, '/dsm': dsmPort };
 const dist = path.join(__dirname, 'dist');
 
 async function build() {
@@ -68,7 +66,7 @@ function contentLengthReader(onMessage) {
     };
 }
 
-function bridge(ws, glspPort) {
+function bridge(ws) {
     const tcp = net.connect(glspPort, glspHost);
     const pending = [];
     let connected = false;
@@ -96,12 +94,11 @@ build().then(() => {
     const server = http.createServer(serveStatic);
     const wss = new WebSocketServer({ noServer: true });
     server.on('upgrade', (req, socket, head) => {
-        const port = portsByPath[new URL(req.url, 'http://x').pathname];
-        if (!port) { socket.destroy(); return; }
-        wss.handleUpgrade(req, socket, head, ws => bridge(ws, port));
+        if (new URL(req.url, 'http://x').pathname !== '/glsp') { socket.destroy(); return; }
+        wss.handleUpgrade(req, socket, head, ws => bridge(ws));
     });
     server.listen(httpPort, () => {
-        console.log(`Open http://localhost:${httpPort}/  (architectural map, bridged to GLSP server ${glspHost}:${glspPort})`);
-        console.log(`  or http://localhost:${httpPort}/?diagram=dsm  (DSM, bridged to GLSP server ${glspHost}:${dsmPort})`);
+        console.log(`Open http://localhost:${httpPort}/ (architectural map) or http://localhost:${httpPort}/?diagram=dsm (DSM)`);
+        console.log(`  bridged to the GLSP server ${glspHost}:${glspPort}`);
     });
 }).catch(e => { console.error(e); process.exit(1); });

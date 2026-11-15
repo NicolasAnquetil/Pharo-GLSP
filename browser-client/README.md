@@ -1,7 +1,7 @@
 # browser-client
 
 Experimental, minimal browser client (official `@eclipse-glsp/client` 2.8.0) for two Pharo GLSP diagrams,
-each served by its own Pharo GLSP server. Read-only: pan, zoom, selection and, in the DSM, hover.
+both served by one Pharo GLSP server (one port). Read-only: pan, zoom, selection and, in the DSM, hover.
 
 - the architectural map (`archmap-diagram`, `GLSPArchitecturalMapDiagramModule` in `MooseIDE-ArchitecturalMap`, tag `GLSP`)
 - the DSM (`dsm-diagram`, `GLSPDSMDiagramModule` in `MooseIDE-DSM`, tag `GLSP`): a matrix whose cell
@@ -11,30 +11,31 @@ each served by its own Pharo GLSP server. Read-only: pan, zoom, selection and, i
   are red instead of pink, until the mouse leaves them
 
 These two diagram modules are not part of this repository: they are in MooseIDE (for now in the
-`development` branch of [NicolasAnquetil/Midas](https://github.com/NicolasAnquetil/Midas)). Another
-diagram needs its views in `src/di.config.tsx` and an entry in `src/app.ts` and `server.js`.
+`development` branch of [NicolasAnquetil/Midas](https://github.com/NicolasAnquetil/Midas)), subclasses of
+`GLSPMooseDiagramModule` (`MooseIDE-Visualization`, tag `GLSP`). Another diagram needs its views in
+`src/di.config.tsx` and an entry in `src/app.ts`.
 
 The Pharo GLSP server only speaks TCP (`Content-Length` framing) and a browser only speaks WebSocket,
 so `server.js` also bridges each browser WebSocket to its own TCP connection to the Pharo server.
 
 ## Run
 
-1. In the Pharo image, start the server(s) of the diagram(s) to show:
+1. In the Pharo image, start the GLSP server of both diagrams:
 
-       launcher := GLSPArchitecturalMapDiagramModule
-           serve: MooseModel root allModels first allModelPackages
+       entities := MooseModel root allModels first allModelPackages.
+       launcher := GLSPMooseDiagramModule
+           serveAll: { GLSPArchitecturalMapDiagramModule on: entities. GLSPDSMDiagramModule on: entities }
            onPort: 5007.
-       dsmLauncher := GLSPDSMDiagramModule
-           serve: MooseModel root allModels first allModelPackages
-           onPort: 5008.
+
+   (one diagram alone: `GLSPDSMDiagramModule serve: entities onPort: 5007`)
 
 2. Here: `npm install` (once), then `node server.js` (builds `dist/` with esbuild and serves it).
-   Arguments: `node server.js [httpPort=8080] [glspHost=127.0.0.1] [glspPort=5007] [dsmPort=5008]`.
+   Arguments: `node server.js [httpPort=8080] [glspHost=127.0.0.1] [glspPort=5007]`.
 3. Open http://localhost:8080/ for the architectural map, http://localhost:8080/?diagram=dsm for the DSM —
-   reload the page after restarting a Pharo server.
-4. `launcher stop` (and `dsmLauncher stop`) in the image.
+   reload the page after restarting the Pharo server.
+4. `launcher stop` in the image.
 
-`node test-bridge.js` (or `node test-bridge.js ws://localhost:8080/dsm`) checks the bridge and the Pharo server
+`node test-bridge.js` (or `node test-bridge.js dsm`) checks the bridge and the Pharo server
 without a browser (prints what it received).
 
 ## Files
@@ -47,4 +48,4 @@ without a browser (prints what it received).
   `DsmHoverMouseListener` sends `{kind: 'dsmHoverCell', cellId}` when the cell under the mouse changes
   (no `cellId` when it leaves the cells)
 - `index.html` — styles; GLSP's `.sprotty text` rule (centered, 8pt) is overridden for the DSM names
-- `server.js` — esbuild build, static HTTP server, WebSocket ⇄ TCP bridge (`/archmap` → 5007, `/dsm` → 5008)
+- `server.js` — esbuild build, static HTTP server, WebSocket ⇄ TCP bridge (`/glsp` → 5007)
