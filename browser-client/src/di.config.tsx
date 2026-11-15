@@ -1,5 +1,6 @@
 /** @jsx svg */
 import {
+    Action,
     ConsoleLogger,
     GEdge,
     GLabel,
@@ -7,7 +8,9 @@ import {
     GNode,
     IDiagramOptions,
     IView,
+    GModelElement,
     LogLevel,
+    MouseListener,
     Point,
     PolylineEdgeView,
     RenderingContext,
@@ -15,11 +18,14 @@ import {
     STANDALONE_MODULE_CONFIG,
     TYPES,
     angleOfPoint,
+    bindAsService,
     bindOrRebind,
     configureDefaultModelElements,
     configureModelElement,
     createDiagramOptionsModule,
+    findParent,
     initializeDiagramContainer,
+    popupFeature,
     svg,
     toDegrees
 } from '@eclipse-glsp/client';
@@ -133,6 +139,33 @@ export class DsmColumnLabelView extends GLabelView implements IView {
     }
 }
 
+/**
+ * Tells the Pharo server which DSM cell is under the mouse (custom action 'dsmHoverCell', handled by
+ * GLSPDSMHoverCellActionHandler): it answers with the model where the cells of that cell's SCC are red.
+ * Sent only when the cell under the mouse changes; without cellId when the mouse leaves the cells.
+ */
+@injectable()
+export class DsmHoverMouseListener extends MouseListener {
+    protected hoveredCellId: string | undefined;
+
+    override mouseOver(target: GModelElement, event: MouseEvent): Action[] {
+        const cell = findParent(target, element => element.type === 'dsm-cell');
+        return this.hover(cell?.id);
+    }
+
+    override mouseLeave(target: GModelElement, event: MouseEvent): Action[] {
+        return this.hover(undefined);
+    }
+
+    protected hover(cellId: string | undefined): Action[] {
+        if (cellId === this.hoveredCellId) {
+            return [];
+        }
+        this.hoveredCellId = cellId;
+        return [{ kind: 'dsmHoverCell', cellId } as Action];
+    }
+}
+
 const archmapDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => {
     const context = { bind, unbind, isBound, rebind };
     bindOrRebind(context, TYPES.ILogger).to(ConsoleLogger).inSingletonScope();
@@ -142,12 +175,14 @@ const archmapDiagramModule = new ContainerModule((bind, unbind, isBound, rebind)
     configureModelElement(context, 'archmap-dependency', GEdge, DependencyEdgeView);
     configureModelElement(context, 'label', GLabel, CenteredLabelView, { enable: [] });
     // DSM (dsm-diagram, GLSPDSMGModelFactory in MooseIDE-DSM)
-    configureModelElement(context, 'dsm-cell', GNode, DsmCellView);
-    configureModelElement(context, 'dsm-column-header', GNode, DsmHeaderView);
-    configureModelElement(context, 'dsm-row-header', GNode, DsmHeaderView);
+    // No GLSP popup (requestPopupModel, which the Pharo server does not handle): the tooltip is the cell's <title>
+    configureModelElement(context, 'dsm-cell', GNode, DsmCellView, { disable: [popupFeature] });
+    configureModelElement(context, 'dsm-column-header', GNode, DsmHeaderView, { disable: [popupFeature] });
+    configureModelElement(context, 'dsm-row-header', GNode, DsmHeaderView, { disable: [popupFeature] });
     configureModelElement(context, 'dsm-weight', GLabel, CenteredLabelView, { enable: [] });
     configureModelElement(context, 'dsm-row-label', GLabel, DsmRowLabelView, { enable: [] });
     configureModelElement(context, 'dsm-column-label', GLabel, DsmColumnLabelView, { enable: [] });
+    bindAsService(context, TYPES.MouseListener, DsmHoverMouseListener);
 });
 
 export function createContainer(options: IDiagramOptions): Container {

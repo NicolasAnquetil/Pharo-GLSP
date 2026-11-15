@@ -1,12 +1,14 @@
 # browser-client
 
 Experimental, minimal browser client (official `@eclipse-glsp/client` 2.8.0) for two Pharo GLSP diagrams,
-each served by its own Pharo GLSP server. Read-only: pan, zoom and selection only.
+each served by its own Pharo GLSP server. Read-only: pan, zoom, selection and, in the DSM, hover.
 
 - the architectural map (`archmap-diagram`, `GLSPArchitecturalMapDiagramModule` in `MooseIDE-ArchitecturalMap`, tag `GLSP`)
 - the DSM (`dsm-diagram`, `GLSPDSMDiagramModule` in `MooseIDE-DSM`, tag `GLSP`): a matrix whose cell
   (column X, row Y) gives the number of dependencies from X to Y, colored as in the Moose DSM browser
-  (diagonal, dependency, cycle); hover a cell for its details
+  (diagonal, dependency, cycle); hover a cell for its details. Hovering a cell of a cycle sends the
+  custom action `dsmHoverCell` to Pharo, which answers with the model where all the cells of that SCC
+  are red instead of pink, until the mouse leaves them
 
 These two diagram modules are not part of this repository: they are in MooseIDE (for now in the
 `development` branch of [NicolasAnquetil/Midas](https://github.com/NicolasAnquetil/Midas)). Another
@@ -41,6 +43,8 @@ without a browser (prints what it received).
 - `src/di.config.tsx` — views: `archmap-node` (rounded rectangle), `archmap-dependency`
   (polyline with arrowhead), `label` (centered in its node, since the server does no text layout)
 - `src/di.config.tsx` — DSM views: `dsm-cell` (rectangle in the color sent by the server, tooltip),
-  `dsm-row-header` / `dsm-column-header` (row names right-aligned, column names written upwards)
+  `dsm-row-header` / `dsm-column-header` (row names right-aligned, column names written upwards);
+  `DsmHoverMouseListener` sends `{kind: 'dsmHoverCell', cellId}` when the cell under the mouse changes
+  (no `cellId` when it leaves the cells)
 - `index.html` — styles; GLSP's `.sprotty text` rule (centered, 8pt) is overridden for the DSM names
 - `server.js` — esbuild build, static HTTP server, WebSocket ⇄ TCP bridge (`/archmap` → 5007, `/dsm` → 5008)
