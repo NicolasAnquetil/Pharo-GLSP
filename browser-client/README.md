@@ -22,7 +22,7 @@ so `server.js` also bridges each browser WebSocket to its own TCP connection to 
 1. In the Pharo image, start the server(s) of the diagram(s) to show:
 
        launcher := GLSPArchitecturalMapDiagramModule
-           serve: (MiStandaloneArchitecturalMapModel new entities: MooseModel root allModels first allModelPackages)
+           serve: MooseModel root allModels first allModelPackages
            onPort: 5007.
        dsmLauncher := GLSPDSMDiagramModule
            serve: MooseModel root allModels first allModelPackages
