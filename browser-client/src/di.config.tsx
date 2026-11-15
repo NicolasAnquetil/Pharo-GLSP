@@ -174,7 +174,7 @@ const archmapDiagramModule = new ContainerModule((bind, unbind, isBound, rebind)
     configureModelElement(context, 'archmap-node', GNode, RoundedCornerNodeView);
     configureModelElement(context, 'archmap-dependency', GEdge, DependencyEdgeView);
     configureModelElement(context, 'label', GLabel, CenteredLabelView, { enable: [] });
-    // DSM (dsm-diagram, GLSPDSMGModelFactory in MooseIDE-DSM)
+    // DSM (dsm-diagram, GLSPDSMVisualization in MooseIDE-DSM)
     // No GLSP popup (requestPopupModel, which the Pharo server does not handle): the tooltip is the cell's <title>
     configureModelElement(context, 'dsm-cell', GNode, DsmCellView, { disable: [popupFeature] });
     configureModelElement(context, 'dsm-column-header', GNode, DsmHeaderView, { disable: [popupFeature] });
