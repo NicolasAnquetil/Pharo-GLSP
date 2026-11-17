@@ -8,7 +8,7 @@ a generic web client (Eclipse Theia, VS Code, Eclipse IDE) renders the diagram. 
 `Content-Length` framing) and the official Java/Node GLSP servers (diagram modules, action and operation handlers,
 command stack).
 
-Protocol version `1.0.0`; checked against the official `@eclipse-glsp/protocol` 2.8.0 client (see `interop/`).
+Protocol version `1.0.0`; checked against the official Eclipse GLSP client 2.8.0 (see `browser-client/`).
 
 ## Installation
 

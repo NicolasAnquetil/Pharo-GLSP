@@ -73,7 +73,7 @@ Each iteration: red test(s) → minimal implementation → green → refactor.
 - `@eclipse-glsp/protocol` 2.8.0 `BaseJsonrpcGLSPClient` + vscode-jsonrpc 8.2.0 over TCP against
   `GLSPSocketLauncher` (TaskList module): start, initializeServer, initializeClientSession, requestModel→setModel,
   requestTypeHints, createNode→updateModel+setDirtyState, applyLabelEdit, saveModel (file written), dispose, shutdown.
-  Script: `interop/client.js`.
+  Script: `interop/client.js` (since removed: `browser-client/` now uses the official client).
 - Bug found: a client disconnecting raised an unhandled `ConnectionClosed` in the server process (debugger opened,
   process leaked) — regression in `nextByte` from step 8. Red test `testServerEndsWhenTheClientDisconnects`, fixed. ✅ 66 tests.
 
