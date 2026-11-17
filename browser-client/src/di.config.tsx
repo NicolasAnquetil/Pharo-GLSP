@@ -73,14 +73,17 @@ function argsOf(element: Readonly<GNode | GLabel>): { [key: string]: string } {
     return ((element as any).args ?? {}) as { [key: string]: string };
 }
 
-/** A DSM cell: a rectangle in the color the server computed, its weight centered, its details as tooltip */
+/**
+ * A DSM cell: a rectangle, its weight centered, its details as tooltip. Its color comes from the CSS classes the
+ * server put on it (dsm-diagonal, dsm-empty, dsm-dependency, dsm-cycle, dsm-highlighted), see index.html
+ */
 @injectable()
 export class DsmCellView implements IView {
     render(node: Readonly<GNode>, context: RenderingContext): VNode | undefined {
         const args = argsOf(node);
         return (
             <g class-dsm-cell={true} class-selected={node.selected}>
-                <rect class-dsm-cell-box={true} width={node.size.width} height={node.size.height} fill={args.fill ?? '#e6e6e6'} />
+                <rect class-dsm-cell-box={true} width={node.size.width} height={node.size.height} />
                 <title>{args.title ?? ''}</title>
                 {context.renderChildren(node)}
             </g>

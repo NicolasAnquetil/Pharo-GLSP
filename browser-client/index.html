@@ -16,9 +16,18 @@
       .sprotty-edge.arrow { fill: #7a8796; }
       .sprotty-edge.selected { stroke: #d9822b; }
       .sprotty-edge.arrow.selected { fill: #d9822b; }
-      /* DSM: the cell color comes from the server (fill attribute) */
-      .dsm-cell-box { stroke: #ffffff; stroke-width: 1px; }
+      /* DSM: the cell color from the CSS classes sent by the server, the colors of MiDSMBrowserModel>>initializeColors */
+      .dsm-cell-box { fill: #e6e6e6; stroke: #ffffff; stroke-width: 1px; }
+      .dsm-cell.dsm-diagonal .dsm-cell-box { fill: #bfbfbf; }
+      .dsm-cell.dsm-dependency .dsm-cell-box { fill: #659ef6; }
+      .dsm-cell.dsm-cycle .dsm-cell-box { fill: #ffcccc; }
+      /* in the SCC of the cell under the mouse */
+      .dsm-cell.dsm-cycle.dsm-highlighted .dsm-cell-box { fill: #ff0000; }
       .dsm-cell.selected .dsm-cell-box { stroke: #d9822b; stroke-width: 2.5px; }
+      /* The column and the row of the cell under the mouse (node:rectangle): only a thick border, which lets the
+         mouse through to the cells below. More specific than '.sprotty-node:not(.selected)' */
+      .dsm-hovered-line { pointer-events: none; }
+      .dsm-hovered-line > rect.sprotty-node { fill: none; stroke: #000000; stroke-width: 3px; }
       /* glsp-sprotty.css has '.sprotty text { text-anchor: middle; font-size: 8pt }': be at least as specific.
          The header sizes computed by the server assume 13px names */
       .sprotty .dsm-cell text { font-size: 12px; }
