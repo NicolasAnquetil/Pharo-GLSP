@@ -28,6 +28,14 @@ GLSPSocketTest >> connect [
 	^ transport
 ]
 
+{ #category : 'helpers' }
+GLSPSocketTest >> connectionProcesses [
+	"The live processes serving the clients of the launcher of this test"
+
+	^ Process allInstances select: [ :each |
+		  each name isNotNil and: [ (each name beginsWith: launcher connectionProcessNamePrefix) and: [ each isTerminated not ] ] ]
+]
+
 { #category : 'running' }
 GLSPSocketTest >> receiveOn: aTransport [
 
@@ -112,19 +120,19 @@ GLSPSocketTest >> testMalformedMessageAnswersAnError [
 
 { #category : 'tests' }
 GLSPSocketTest >> testServerEndsWhenTheClientDisconnects [
-	"Regression: a client closing its socket made the server process fail on ConnectionClosed (and open a debugger)"
+	"Regression: a client closing its socket made the server process fail on ConnectionClosed (and open a debugger). Only the processes of this launcher: other GLSP servers may be running in the image"
 
 	| client deadline |
 	client := self connect.
 	client send: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"applicationId":"e2e","protocolVersion":"1.0.0"}}'.
 	self receiveOn: client.
 	self assert: launcher connections size equals: 1.
+	self assert: self connectionProcesses size equals: 1.
 	client close.
 	deadline := Time millisecondClockValue + 3000.
 	[ launcher connections isNotEmpty and: [ Time millisecondClockValue < deadline ] ] whileTrue: [ (Delay forMilliseconds: 20) wait ].
 	self assert: launcher connections isEmpty.
-	self deny: (Process allInstances anySatisfy: [ :each |
-			 each name isNotNil and: [ (each name beginsWith: 'GLSP connection') and: [ each isTerminated not ] ] ])
+	self assert: self connectionProcesses isEmpty
 ]
 
 { #category : 'tests' }

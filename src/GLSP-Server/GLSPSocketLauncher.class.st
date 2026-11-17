@@ -36,6 +36,20 @@ GLSPSocketLauncher >> acceptLoop [
 	[ running ] whileTrue: [ (listener waitForAcceptFor: 1) ifNotNil: [ :socket | self serve: socket ] ]
 ]
 
+{ #category : 'accessing' }
+GLSPSocketLauncher >> connectionProcessNameFor: aSocket [
+	"The name of the process serving the client of aSocket: with my port, to tell my connections from those of the other launchers"
+
+	^ self connectionProcessNamePrefix , aSocket remoteAddress printString
+]
+
+{ #category : 'accessing' }
+GLSPSocketLauncher >> connectionProcessNamePrefix [
+	"The processes serving my clients are named from this prefix"
+
+	^ 'GLSP connection on port ' , port printString , ' from '
+]
+
 { #category : 'running' }
 GLSPSocketLauncher >> connections [
 	"The servers of the connected clients"
@@ -63,7 +77,7 @@ GLSPSocketLauncher >> port [
 	^ port
 ]
 
-{ #category : 'running' }
+{ #category : 'private' }
 GLSPSocketLauncher >> serve: aSocket [
 	"Serve one client connection with a new server, in its own process"
 
@@ -78,7 +92,7 @@ GLSPSocketLauncher >> serve: aSocket [
 		[ server serveTransport: transport ] ensure: [
 				connections remove: server ifAbsent: [ ].
 				server shutdown.
-				transport close ] ] forkAt: Processor lowIOPriority named: 'GLSP connection ' , aSocket remoteAddress printString
+				transport close ] ] forkAt: Processor lowIOPriority named: (self connectionProcessNameFor: aSocket)
 ]
 
 { #category : 'running' }
