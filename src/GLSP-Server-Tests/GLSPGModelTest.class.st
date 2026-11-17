@@ -9,6 +9,29 @@ Class {
 }
 
 { #category : 'tests' }
+GLSPGModelTest >> testANodeIsNotSelectedByDefault [
+
+	| node |
+	node := GLSPGNode new
+		        id: 'n1';
+		        yourself.
+	self deny: node selected.
+	self deny: (node asJRPCJSON includesKey: 'selected')
+]
+
+{ #category : 'tests' }
+GLSPGModelTest >> testASelectedNodeSaysItInJSON [
+	"Standard GModel property: the client shows the element selected"
+
+	self
+		assert: ((GLSPGNode new
+				  id: 'n1';
+				  selected: true;
+				  yourself) asJRPCJSON at: 'selected')
+		equals: true
+]
+
+{ #category : 'tests' }
 GLSPGModelTest >> testCssClassesOnlyWhenPresent [
 
 	| node |

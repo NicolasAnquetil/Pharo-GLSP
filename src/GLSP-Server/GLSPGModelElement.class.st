@@ -14,7 +14,8 @@ Class {
 		'children',
 		'parent',
 		'cssClasses',
-		'args'
+		'args',
+		'selected'
 	],
 	#category : 'GLSP-Server-GModel',
 	#package : 'GLSP-Server',
@@ -85,6 +86,7 @@ GLSPGModelElement >> asJRPCJSON [
 		at: 'children' put: (children collect: [ :each | each asJRPCJSON ] as: Array).
 	(cssClasses isNil or: [ cssClasses isEmpty ]) ifFalse: [ json at: 'cssClasses' put: cssClasses asArray ].
 	(args isNil or: [ args isEmpty ]) ifFalse: [ json at: 'args' put: args asJRPCJSON ].
+	self selected ifTrue: [ json at: 'selected' put: true ].
 	self addPropertiesTo: json.
 	^ json
 ]
@@ -159,6 +161,19 @@ GLSPGModelElement >> remove: anElement [
 GLSPGModelElement >> root [
 
 	^ parent ifNil: [ self ] ifNotNil: [ parent root ]
+]
+
+{ #category : 'accessing' }
+GLSPGModelElement >> selected [
+	"Whether the client shows me selected (standard GModel property)"
+
+	^ selected ifNil: [ false ]
+]
+
+{ #category : 'accessing' }
+GLSPGModelElement >> selected: aBoolean [
+
+	selected := aBoolean
 ]
 
 { #category : 'accessing' }

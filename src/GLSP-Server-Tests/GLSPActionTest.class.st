@@ -88,3 +88,44 @@ GLSPActionTest >> testResponseToNonRequestHasEmptyResponseId [
 	response respondTo: (GLSPAction fromJSON: (self json: '{"kind":"requestModel","options":{}}')).
 	self assert: (response asJRPCJSON at: 'responseId' ifAbsent: [ '' ]) equals: ''
 ]
+
+{ #category : 'tests' }
+GLSPActionTest >> testSelectActionFromJSON [
+
+	| action |
+	action := GLSPAction fromJSON: (Dictionary new
+			           at: 'kind' put: 'elementSelected';
+			           at: 'selectedElementsIDs' put: #( 'a' 'b' );
+			           at: 'deselectedElementsIDs' put: #( 'c' );
+			           at: 'deselectAll' put: false;
+			           yourself).
+	self assert: action class equals: GLSPSelectAction.
+	self assert: action selectedElementsIDs asArray equals: #( 'a' 'b' ).
+	self assert: action deselectedElementsIDs asArray equals: #( 'c' ).
+	self deny: action deselectAll
+]
+
+{ #category : 'tests' }
+GLSPActionTest >> testSelectActionWithoutOptionalFields [
+	"deselectAll is optional; the client may also leave out empty lists"
+
+	| action |
+	action := GLSPAction fromJSON: (Dictionary new
+			           at: 'kind' put: 'elementSelected';
+			           at: 'selectedElementsIDs' put: #( 'a' );
+			           yourself).
+	self deny: action deselectAll.
+	self assert: action deselectedElementsIDs isEmpty
+]
+
+{ #category : 'tests' }
+GLSPActionTest >> testSelectAllActionFromJSON [
+
+	| action |
+	action := GLSPAction fromJSON: (Dictionary new
+			           at: 'kind' put: 'allSelected';
+			           at: 'select' put: true;
+			           yourself).
+	self assert: action class equals: GLSPSelectAllAction.
+	self assert: action select
+]
