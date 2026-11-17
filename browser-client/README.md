@@ -1,7 +1,7 @@
 # browser-client
 
 Experimental, minimal browser client (official `@eclipse-glsp/client` 2.8.0) for two Pharo GLSP diagrams,
-both served by one Pharo GLSP server (one port). Read-only: pan, zoom, selection and, in the DSM, hover.
+both served by one Pharo GLSP server (one port). Read-only: pan, zoom, selection and, in the DSM, hover; in the architectural map, the nodes can also be moved.
 
 - the architectural map (`archmap-diagram`, `GLSPArchitecturalMapDiagramModule` in `MooseIDE-ArchitecturalMap`, tag `GLSP`)
 - the DSM (`dsm-diagram`, `GLSPDSMDiagramModule` in `MooseIDE-DSM`, tag `GLSP`): a matrix whose cell
@@ -42,7 +42,7 @@ without a browser (prints what it received).
 
 ## Files
 
-- `src/app.ts` — picks the diagram (`?diagram=dsm`), connects over WebSocket and loads it (read-only edit mode)
+- `src/app.ts` — picks the diagram (`?diagram=dsm`), connects over WebSocket and loads it (editable for the architectural map, where the type hints of the server only let the user move the nodes; read-only for the DSM)
 - `src/di.config.tsx` — views: `archmap-node` (rounded rectangle), `archmap-dependency`
   (polyline with arrowhead), `label` (centered in its node, since the server does no text layout)
 - `src/di.config.tsx` — DSM views: `dsm-cell` (rectangle colored from its CSS classes, tooltip),

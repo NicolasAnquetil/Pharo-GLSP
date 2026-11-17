@@ -7,9 +7,11 @@ import { MessageConnection } from 'vscode-jsonrpc';
 import { createContainer } from './di.config';
 
 // ?diagram=dsm shows the DSM; the architectural map otherwise. Both are served by the same Pharo GLSP server (see server.js)
-const diagrams: { [name: string]: { type: string; title: string } } = {
-    archmap: { type: 'archmap-diagram', title: 'Architectural map (GLSP)' },
-    dsm: { type: 'dsm-diagram', title: 'DSM (GLSP)' }
+// editMode: what the user can then do with each element is told by the server (type hints): in the
+// architectural map, only move the nodes
+const diagrams: { [name: string]: { type: string; title: string; editMode: string } } = {
+    archmap: { type: 'archmap-diagram', title: 'Architectural map (GLSP)', editMode: EditMode.EDITABLE },
+    dsm: { type: 'dsm-diagram', title: 'DSM (GLSP)', editMode: EditMode.READONLY }
 };
 const diagramName = new URLSearchParams(window.location.search).get('diagram') === 'dsm' ? 'dsm' : 'archmap';
 const diagramType = diagrams[diagramName].type;
@@ -27,7 +29,7 @@ async function initialize(connectionProvider: MessageConnection, isReconnecting 
         glspClientProvider: async () => glspClient,
         // ignored by the Pharo server, which serves the model it was started with
         sourceUri: `${diagramName}://model`,
-        editMode: EditMode.READONLY
+        editMode: diagrams[diagramName].editMode
     });
     const diagramLoader = container.get(DiagramLoader);
     await diagramLoader.load({ requestModelOptions: { isReconnecting } });
