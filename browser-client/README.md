@@ -3,8 +3,8 @@
 Experimental, minimal browser client (official `@eclipse-glsp/client` 2.8.0) for two Pharo GLSP diagrams,
 both served by one Pharo GLSP server (one port). Read-only: pan, zoom, selection and, in the DSM, hover; in the architectural map, the nodes can also be moved.
 
-- the architectural map (`archmap-diagram`, `GLSPArchitecturalMapDiagramModule` in `MooseIDE-ArchitecturalMap`, tag `GLSP`)
-- the DSM (`dsm-diagram`, `GLSPDSMDiagramModule` in `MooseIDE-DSM`, tag `GLSP`): a matrix whose cell
+- the architectural map (`archmap-diagram`, `GLSPArchitecturalMapBrowser` in `MooseIDE-ArchitecturalMap`, tag `GLSP`)
+- the DSM (`dsm-diagram`, `GLSPDSMBrowser` in `MooseIDE-DSM`, tag `GLSP`): a matrix whose cell
   (column X, row Y) gives the number of dependencies from X to Y, colored as in the Moose DSM browser
   (diagonal, dependency, cycle); hover a cell for its details. Hovering a cell sends the custom action
   `dsmHoverCell` to Pharo, which answers with the model where the column and the row of that cell are
@@ -26,10 +26,10 @@ so `server.js` also bridges each browser WebSocket to its own TCP connection to 
 
        entities := MooseModel root allModels first allModelPackages.
        launcher := GLSPMooseDiagramModule
-           serveAll: { GLSPArchitecturalMapDiagramModule on: entities. GLSPDSMDiagramModule on: entities }
+           serveAll: { GLSPArchitecturalMapBrowser diagramModuleOn: entities. GLSPDSMBrowser diagramModuleOn: entities }
            onPort: 5007.
 
-   (one diagram alone: `GLSPDSMDiagramModule serve: entities onPort: 5007`)
+   (one diagram alone: `GLSPDSMBrowser serve: entities onPort: 5007`)
 
 2. Here: `npm install` (once), then `node server.js` (builds `dist/` with esbuild and serves it).
    Arguments: `node server.js [httpPort=8080] [glspHost=127.0.0.1] [glspPort=5007]`.
